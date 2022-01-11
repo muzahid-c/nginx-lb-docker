@@ -86,6 +86,10 @@ docker run --net appnet0 --ip 10.10.0.9 --name node3 node3:v1
    
 Now you can see browser is getting response and connecting each node once hit refresh!
 
+![node1](https://user-images.githubusercontent.com/36810834/148900320-708fb240-3d4f-49c0-b98f-84403da9821b.png)
+![node2](https://user-images.githubusercontent.com/36810834/148900329-198d7ad7-ebaa-445f-997c-79dcee7e0862.png)
+![node3](https://user-images.githubusercontent.com/36810834/148900330-e6c6c5a5-0530-4263-a436-8fa8ff96a7e2.png)
+
 ### Some load balancing methods
 By default Nginx use Round Robin method. We can use other methods too depending the situations. Please see refenece below:
 
