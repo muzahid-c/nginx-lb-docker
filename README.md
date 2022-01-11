@@ -10,7 +10,7 @@ Above command will create a bridge named `appnet0` in docker having ip range `10
 `appnet0` will have ip address `10.10.0.1`. This can be verified either by `ip addr` or `docker inspect appnet0`.
 
 ## Step 2 (Create the dockerfile for load balancer)
-Now we will create the docker file for load balancer of Nginx. Dockerfile will be as following:
+Now we will create the docker file for load balancer of Nginx. The name of the dockerfile file in the repo is `lbdockerfile` and it contains below lines only:
 
 ```
 FROM nginx
@@ -19,7 +19,7 @@ COPY nginx.conf /etc/nginx/
 
 ```
 
-The name of the dockerfile file in the repo is `lbdockerfile`. Use below command to build the load balancer image named lb with tag v1:
+Use below command to build the load balancer image named lb with tag v1:
 
 `docker build -t lb:v1 -f lbdockerfile .`
 
@@ -44,7 +44,7 @@ We need to add below lines in nginx.conf file. We will use `upstream` directive 
  ```
  This `nginx.conf` will be copied to load balancer Nginx container using dockerfile. 
  
-## Step 4 (Running the loab balancer image with custom IP)
+## Step 4 (Running the load balancer image with custom IP)
 We will now run the load balancer with IP 10.10.0.5 using bridge `appnet0`. Run below command:
 
 `docker run --net appnet0 --ip 10.10.0.5 -p 80:80 --name nginx_lb lb:v1`
