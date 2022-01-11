@@ -47,9 +47,9 @@ We need to add below lines in nginx.conf file. We will use `upstream` directive 
 ## Step 4 (Running the loab balancer image with custom Ip)
 We will now run the load balancer with IP 10.10.0.5 using bridge `appnet0`. Run below command:
 
-`docker run --net appnet0 --ip 10.10.0.5 --name nginx_lb lb:v1`
+`docker run --net appnet0 --ip 10.10.0.5 -p 80:80 --name nginx_lb lb:v1`
 
-Here we use bridge `appnet0` and ip `10.10.0.5` for load balancer. We gave custom name `nginx_lb`.
+Here we use bridge `appnet0` and ip `10.10.0.5` for load balancer. We gave custom name `nginx_lb`. Also we are binding port 80 of container to port 80 of host machine. Now load balancer is accessible from outside.
 
 If everything goes well then load balancer will run perfectly. If we launch browser (Chrome recommended) and put ip 10.10.0.5 nothing will happen as nodes are not running right now. We can see from console that load balancer is trying to connect IP 7,8,9 one by one. Eventually the browser will show `504 Gateway Time-out`.
 
@@ -66,7 +66,7 @@ If everything goes well then load balancer will run perfectly. If we launch brow
 ```
 
 ## Step 5 (Running node with custom ip)
-For this we will use another docker file to upload custom index.html as we want to see which node is connected each time a browser send the requrest. See node1, node2 and node3 folder for docker file and custom index.html. Run below commands to build the image and launch the container. Remember to run below commend to each folder.
+For this we will use another docker file to upload custom index.html as we want to see which node is connected each time a browser send the requrest. See node1, node2 and node3 folder for docker file and custom index.html. Run below commands to build the image and launch the container. Remember to run below command in each folder.
 
 ```
 docker build -t node1:v1 .
@@ -86,7 +86,7 @@ docker run --net appnet0 --ip 10.10.0.9 --name node3 node3:v1
    
 Now you can see browser is getting response!
 
-## Some load balancing methods
+### Some load balancing methods
 By default Nginx use Round Robin method. We can use other methods too depending the situations. Please see refenece below:
 
 https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/
