@@ -88,7 +88,7 @@ docker run --net appnet0 --ip 10.10.0.9 --name node3 node3:v1
 ``` 
 Let's run `docker stats` command to see which container is running now:
 
-![docker_stats](https://user-images.githubusercontent.com/36810834/148911882-f7789c58-d063-457a-97d1-c3e1e369fe12.png)
+![docker_stats](https://user-images.githubusercontent.com/36810834/148912309-3e97ec08-1e06-444d-8b9c-7c3dd9612cd2.png)
 
 All the nodes are running with load balancer.
 
