@@ -65,7 +65,7 @@ If everything goes well then load balancer will run perfectly. If we launch brow
 2022/01/11 05:58:55 [error] 31#31: *1 no live upstreams while connecting to upstream, client: 10.10.0.1, server: , request: "GET /favicon.ico HTTP/1.1", upstream: "http://lb0/favicon.ico", host: "10.10.0.5", referrer: "http://10.10.0.5/
 ```
 
-## Step 5 (Running node with custom ip)
+## Step 5 (Running node with custom IP)
 For this we will use another docker file to upload custom index.html as we want to see which node is connected each time a browser send the requrest. See node1, node2 and node3 folder for docker file and custom index.html. Run below commands to build the image and launch the container. Remember to run below command in each folder.
 
 ```
@@ -84,7 +84,7 @@ docker build -t node3:v1 .
 docker run --net appnet0 --ip 10.10.0.9 --name node3 node3:v1
 ``` 
    
-Now you can see browser is getting response!
+Now you can see browser is getting response and connecting each node once hit refresh!
 
 ### Some load balancing methods
 By default Nginx use Round Robin method. We can use other methods too depending the situations. Please see refenece below:
