@@ -1,5 +1,5 @@
 # NGINX as loadbalancer in Docker Container
-This is a tutorial on how to configure nginx container as load balancer. We will use dockerfile to configure the load balancer. Custom network (bridge) will be used in Docker to have more control over the ip address assignment. The whole scenerio is tested in Ubuntu Ubuntu 20.04.3 LTS.
+This is a tutorial on how to configure nginx container as load balancer. We will use dockerfile to configure the load balancer. Custom network (bridge) will be used in Docker to have more control over the ip address assignment. The whole scenerio is tested in Ubuntu 20.04.3 LTS.
 
 ## Step 1 (Create a custom bridge network in docker)
 Create custom bridge network using below command:
@@ -84,4 +84,9 @@ docker build -t node3:v1 .
 docker run --net appnet0 --ip 10.10.0.9 --name node3 node3:v1
 ``` 
    
-Now you can see browser is getting response!      
+Now you can see browser is getting response!
+
+## Some load balancing methods
+By default Nginx use Round Robin method. We can use other methods too depending the situations. Please see refenece below:
+
+https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/
