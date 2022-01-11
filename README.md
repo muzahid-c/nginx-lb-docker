@@ -86,7 +86,12 @@ docker build -t node3:v1 .
 
 docker run --net appnet0 --ip 10.10.0.9 --name node3 node3:v1
 ``` 
-   
+Let's run `docker stats` command to see which container is running now:
+
+![docker_stats](https://user-images.githubusercontent.com/36810834/148911882-f7789c58-d063-457a-97d1-c3e1e369fe12.png)
+
+All the nodes are running with load balancer.
+
 Now you can see browser is getting response and connecting each node once hit refresh!
 
 ![node1](https://user-images.githubusercontent.com/36810834/148900320-708fb240-3d4f-49c0-b98f-84403da9821b.png)
