@@ -42,5 +42,23 @@ We need to add below lines in nginx.conf file. We will use `upstream` directive 
     }
  
  ```
- This `nginx.conf` will be copied to load balancer Nginx container using dockerfile  
-  
+ This `nginx.conf` will be copied to load balancer Nginx container using dockerfile. 
+ 
+## Step 4 (Run the loab balancer image with custom Ip)
+We will now run the load balancer with IP 10.10.0.5 using bridge `appnet0`. Run below command:
+
+`docker run --net appnet0 --ip 10.10.0.5 --name nginx_lb lb:v1`
+
+Here we use bridge `appnet0` and ip `10.10.0.5` for load balancer. We gave custom name `nginx_lb`.
+
+If everything goes well then load balancer will run perfectly. If we launch browser (Chrome recommended) and put ip 10.10.0.5 nothing will happen as nodes are not running right now. We can see from console that load balancer is trying to connect IP 7,8,9 one by one. Eventually the browser will show `504 Gateway Time-out`.
+
+```
+2022/01/11 05:46:30 [warn] 33#33: *1 upstream server temporarily disabled while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.7:80/", host: "10.10.0.5"
+2022/01/11 05:46:30 [error] 33#33: *1 upstream timed out (110: Connection timed out) while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.7:80/", host: "10.10.0.5"
+2022/01/11 05:47:30 [warn] 33#33: *1 upstream server temporarily disabled while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.8:80/", host: "10.10.0.5"
+2022/01/11 05:47:30 [error] 33#33: *1 upstream timed out (110: Connection timed out) while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.8:80/", host: "10.10.0.5"
+2022/01/11 05:48:30 [warn] 33#33: *1 upstream server temporarily disabled while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.9:80/", host: "10.10.0.5"
+2022/01/11 05:48:30 [error] 33#33: *1 upstream timed out (110: Connection timed out) while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.9:80/", host: "10.10.0.5"
+```
+   
