@@ -44,7 +44,7 @@ We need to add below lines in nginx.conf file. We will use `upstream` directive 
  ```
  This `nginx.conf` will be copied to load balancer Nginx container using dockerfile. 
  
-## Step 4 (Run the loab balancer image with custom Ip)
+## Step 4 (Running the loab balancer image with custom Ip)
 We will now run the load balancer with IP 10.10.0.5 using bridge `appnet0`. Run below command:
 
 `docker run --net appnet0 --ip 10.10.0.5 --name nginx_lb lb:v1`
@@ -54,11 +54,34 @@ Here we use bridge `appnet0` and ip `10.10.0.5` for load balancer. We gave custo
 If everything goes well then load balancer will run perfectly. If we launch browser (Chrome recommended) and put ip 10.10.0.5 nothing will happen as nodes are not running right now. We can see from console that load balancer is trying to connect IP 7,8,9 one by one. Eventually the browser will show `504 Gateway Time-out`.
 
 ```
-2022/01/11 05:46:30 [warn] 33#33: *1 upstream server temporarily disabled while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.7:80/", host: "10.10.0.5"
-2022/01/11 05:46:30 [error] 33#33: *1 upstream timed out (110: Connection timed out) while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.7:80/", host: "10.10.0.5"
-2022/01/11 05:47:30 [warn] 33#33: *1 upstream server temporarily disabled while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.8:80/", host: "10.10.0.5"
-2022/01/11 05:47:30 [error] 33#33: *1 upstream timed out (110: Connection timed out) while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.8:80/", host: "10.10.0.5"
-2022/01/11 05:48:30 [warn] 33#33: *1 upstream server temporarily disabled while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.9:80/", host: "10.10.0.5"
-2022/01/11 05:48:30 [error] 33#33: *1 upstream timed out (110: Connection timed out) while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.10.9:80/", host: "10.10.0.5"
+2022/01/11 05:58:49 [error] 31#31: *1 connect() failed (113: No route to host) while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.0.7:80/", host: "10.10.0.5"
+2022/01/11 05:58:49 [warn] 31#31: *1 upstream server temporarily disabled while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.0.7:80/", host: "10.10.0.5"
+2022/01/11 05:58:52 [error] 31#31: *1 connect() failed (113: No route to host) while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.0.8:80/", host: "10.10.0.5"
+2022/01/11 05:58:52 [warn] 31#31: *1 upstream server temporarily disabled while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.0.8:80/", host: "10.10.0.5"
+2022/01/11 05:58:55 [error] 31#31: *1 connect() failed (113: No route to host) while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.0.9:80/", host: "10.10.0.5"
+2022/01/11 05:58:55 [warn] 31#31: *1 upstream server temporarily disabled while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.0.9:80/", host: "10.10.0.5"
+10.10.0.1 - - [11/Jan/2022:05:58:55 +0000] "GET / HTTP/1.1" 502 559 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36" "-"
+10.10.0.1 - - [11/Jan/2022:05:58:55 +0000] "GET /favicon.ico HTTP/1.1" 502 559 "http://10.10.0.5/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36" "-"
+2022/01/11 05:58:55 [error] 31#31: *1 no live upstreams while connecting to upstream, client: 10.10.0.1, server: , request: "GET /favicon.ico HTTP/1.1", upstream: "http://lb0/favicon.ico", host: "10.10.0.5", referrer: "http://10.10.0.5/
 ```
+
+## Step 5 (Running node with custom ip)
+For this we will use another docker file to upload custom index.html as we want to see which node is connected each time a browser send the requrest. See node1, node2 and node3 folder for docker file and custom index.html. Run below commands to build the image and launch the container. Remember to run below commend to each folder.
+
+```
+docker build -t node1:v1 .
+
+docker run --net appnet0 --ip 10.10.0.7 --name node1 node1:v1
+``` 
+```
+docker build -t node2:v1 .
+
+docker run --net appnet0 --ip 10.10.0.8 --name node2 node2:v1
+``` 
+```
+docker build -t node3:v1 .
+
+docker run --net appnet0 --ip 10.10.0.9 --name node3 node3:v1
+``` 
    
+Now you can see browser is getting response!      
