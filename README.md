@@ -65,7 +65,7 @@ If everything goes well then load balancer will run perfectly. If we launch brow
 2022/01/11 05:58:55 [error] 31#31: *1 no live upstreams while connecting to upstream, client: 10.10.0.1, server: , request: "GET /favicon.ico HTTP/1.1", upstream: "http://lb0/favicon.ico", host: "10.10.0.5", referrer: "http://10.10.0.5/
 ```
 
-Eventually the browser will show `504 Gateway Time-out`.
+Eventually the browser will show `502 Gateway Time-out`.
 ![bad_gw](https://user-images.githubusercontent.com/36810834/148908786-45e83bda-a7a5-4954-9d22-78e6cffac6a8.png)
 
 ## Step 5 (Running node with custom IP)
