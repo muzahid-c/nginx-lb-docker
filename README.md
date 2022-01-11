@@ -19,7 +19,7 @@ COPY nginx.conf /etc/nginx/
 
 ```
 
-Use below command to build the load balancer image named lb with tag v1:
+Use below command to build the load balancer image named `lb` with tag `v1`:
 
 `docker build -t lb:v1 -f lbdockerfile .`
 
