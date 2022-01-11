@@ -44,7 +44,7 @@ We need to add below lines in nginx.conf file. We will use `upstream` directive 
  ```
  This `nginx.conf` will be copied to load balancer Nginx container using dockerfile. 
  
-## Step 4 (Running the loab balancer image with custom Ip)
+## Step 4 (Running the loab balancer image with custom IP)
 We will now run the load balancer with IP 10.10.0.5 using bridge `appnet0`. Run below command:
 
 `docker run --net appnet0 --ip 10.10.0.5 -p 80:80 --name nginx_lb lb:v1`
