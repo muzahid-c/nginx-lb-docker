@@ -49,7 +49,11 @@ We will now run the load balancer with IP 10.10.0.5 using bridge `appnet0`. Run 
 
 Here we use bridge `appnet0` and ip `10.10.0.5` for load balancer. We gave custom name `nginx_lb`. Also we are binding port 80 of container to port 80 of host machine. Now load balancer is accessible from outside.
 
-If everything goes well then load balancer will run perfectly. If we launch browser (Chrome recommended) and put ip 10.10.0.5 nothing will happen as **nodes are NOT running right now**. We can see from load balancer log that it is trying to connect IP 7,8,9 one by one as default method is **ROUND ROBIN**.
+If everything goes well then load balancer will run perfectly. If we launch browser (Chrome recommended) and put ip 10.10.0.5 nothing will happen as **nodes are NOT running right now**. To see the log in load balancer run below command:
+
+`docker container logs nginx_lb`
+
+From the log we can see that it is trying to connect IP 7,8,9 one by one as default method is **ROUND ROBIN**.
 
 ```
 2022/01/11 05:58:49 [error] 31#31: *1 connect() failed (113: No route to host) while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.0.7:80/", host: "10.10.0.5"
@@ -63,11 +67,11 @@ If everything goes well then load balancer will run perfectly. If we launch brow
 2022/01/11 05:58:55 [error] 31#31: *1 no live upstreams while connecting to upstream, client: 10.10.0.1, server: , request: "GET /favicon.ico HTTP/1.1", upstream: "http://lb0/favicon.ico", host: "10.10.0.5", referrer: "http://10.10.0.5/
 ```
 
-Eventually the browser will show `502 Gateway Time-out`.
+Eventually the browser will show `Gateway Time-out` or `Bad Gateway`.
 ![bad_gw](https://user-images.githubusercontent.com/36810834/148908786-45e83bda-a7a5-4954-9d22-78e6cffac6a8.png)
 
 ## Step 5 (Building node and running with custom IP)
-For this we will use another docker file to upload custom index.html as we want to see which node is connected each time a browser send the requrest. See node1, node2 and node3 folder for docker file and custom index.html. Run below commands to build the image and launch the container. Remember to run below command in each folder.
+To build the node we will use another docker file to upload custom index.html as we want to see which node is connected each time a browser send the requrest. See node1, node2 and node3 folder for docker file and custom index.html. Run below commands to build the image and launch the container. Remember to run below command in each folder.
 
 **Node1:**
 ```
