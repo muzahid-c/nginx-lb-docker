@@ -1,5 +1,5 @@
 # NGINX as loadbalancer in Docker Container
-This is a tutorial on how to configure nginx container as load balancer. We will use dockerfile to configure the load balancer. Custom network (bridge) will be used in Docker to have more control over the ip address assignment. The whole scenerio is tested in Ubuntu 20.04.3 LTS. The load balancer configured here is HTTP Load Balancing.
+This is a tutorial on how to configure nginx container as load balancer. We will use dockerfile to configure the load balancer. Custom network (bridge) will be used in Docker to have more control over the ip address assignment. The whole scenerio is tested in Ubuntu 20.04.3 LTS. The load balancer configured here is HTTP Load Balancer.
 
 ## Step 1 (Create a custom bridge network in docker)
 Create custom bridge network using below command:
@@ -16,7 +16,6 @@ Now we will create the docker file for load balancer of Nginx. The name of the d
 FROM nginx
 # Add custom nginx conf for load balancer
 COPY nginx.conf /etc/nginx/
-
 ```
 
 Use below command to build the load balancer image named `lb` with tag `v1`:
@@ -40,7 +39,6 @@ We need to add below lines in nginx.conf file. We will use `upstream` directive 
             proxy_pass http://lb0;
         }
     }
- 
  ```
  This `nginx.conf` will be copied to load balancer Nginx container using dockerfile. 
  
@@ -51,7 +49,7 @@ We will now run the load balancer with IP 10.10.0.5 using bridge `appnet0`. Run 
 
 Here we use bridge `appnet0` and ip `10.10.0.5` for load balancer. We gave custom name `nginx_lb`. Also we are binding port 80 of container to port 80 of host machine. Now load balancer is accessible from outside.
 
-If everything goes well then load balancer will run perfectly. If we launch browser (Chrome recommended) and put ip 10.10.0.5 nothing will happen as nodes are not running right now. We can see from console that load balancer is trying to connect IP 7,8,9 one by one.
+If everything goes well then load balancer will run perfectly. If we launch browser (Chrome recommended) and put ip 10.10.0.5 nothing will happen as **nodes are NOT running right now**. We can see from load balancer log that it is trying to connect IP 7,8,9 one by one as default method is **ROUND ROBIN**.
 
 ```
 2022/01/11 05:58:49 [error] 31#31: *1 connect() failed (113: No route to host) while connecting to upstream, client: 10.10.0.1, server: , request: "GET / HTTP/1.1", upstream: "http://10.10.0.7:80/", host: "10.10.0.5"
@@ -68,19 +66,22 @@ If everything goes well then load balancer will run perfectly. If we launch brow
 Eventually the browser will show `502 Gateway Time-out`.
 ![bad_gw](https://user-images.githubusercontent.com/36810834/148908786-45e83bda-a7a5-4954-9d22-78e6cffac6a8.png)
 
-## Step 5 (Running node with custom IP)
+## Step 5 (Building node and running with custom IP)
 For this we will use another docker file to upload custom index.html as we want to see which node is connected each time a browser send the requrest. See node1, node2 and node3 folder for docker file and custom index.html. Run below commands to build the image and launch the container. Remember to run below command in each folder.
 
+**Node1:**
 ```
 docker build -t node1:v1 .
 
 docker run --net appnet0 --ip 10.10.0.7 --name node1 node1:v1
 ``` 
+**Node2:**
 ```
 docker build -t node2:v1 .
 
 docker run --net appnet0 --ip 10.10.0.8 --name node2 node2:v1
 ``` 
+**Node3:**
 ```
 docker build -t node3:v1 .
 
@@ -99,6 +100,6 @@ Now you can see browser is getting response and connecting each node once hit re
 ![node3](https://user-images.githubusercontent.com/36810834/148900330-e6c6c5a5-0530-4263-a436-8fa8ff96a7e2.png)
 
 ### Some load balancing methods
-By default Nginx use Round Robin method. We can use other methods too depending the situations. Please see refenece below:
+By default Nginx use Round Robin method. We can use other methods too depending the situations. Please see reference below:
 
 https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/
