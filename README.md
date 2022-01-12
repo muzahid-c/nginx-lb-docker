@@ -110,6 +110,7 @@ https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/
 
 ## Load Balancer using Docker-Compose
 We can simplify above steps using docker-compose. All the confiquration are in `dockercompose_nginxlb` folder. Just run below command:
+
 `docker-compose up`
 
 You will see the same result!
