@@ -107,3 +107,9 @@ Now you can see browser is getting response and connecting each node once hit re
 By default Nginx use Round Robin method. We can use other methods too depending the situations. Please see reference below:
 
 https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/
+
+## Load Balancer using Docker-Compose
+We can simplify above steps using docker-compose. All the confiquration are in `dockercompose_nginxlb` folder. Just run below command:
+`docker-compose up`
+
+You will see the same result!
